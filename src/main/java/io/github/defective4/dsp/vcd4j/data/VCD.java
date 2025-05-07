@@ -1,5 +1,7 @@
 package io.github.defective4.dsp.vcd4j.data;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,6 +126,12 @@ public class VCD {
         return "VCD [date=" + date + ", version=" + version + ", comment=" + comment + ", scope=" + scope
                 + ", timeScale=" + timeScale + ", valueChanges=" + valueChanges + ", variableDefinitions="
                 + variableDefinitions + "]";
+    }
+
+    public static List<ChangeEntry<?>> makeChangeEntriesList(ChangeEntry<?>... entries) {
+        List<ChangeEntry<?>> list = new ArrayList<>();
+        Collections.addAll(list, entries);
+        return list;
     }
 
 }

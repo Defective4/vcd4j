@@ -68,8 +68,7 @@ public class VCDWriter {
             writer.println("$enddefinitions $end");
             writer.println("$dumpvars");
             Map<Long, List<ChangeEntry<?>>> valueChanges = vcd.getValueChanges();
-            List<Map.Entry<Long, List<ChangeEntry<?>>>> sorted = new ArrayList<>();
-            sorted.addAll(valueChanges.entrySet());
+            List<Map.Entry<Long, List<ChangeEntry<?>>>> sorted = new ArrayList<>(valueChanges.entrySet());
             sorted.sort((e1, e2) -> (int) (e1.getKey() - e2.getKey()));
             for (Map.Entry<Long, List<ChangeEntry<?>>> entry : sorted) {
                 for (ChangeEntry<?> val : entry.getValue()) {
