@@ -3,6 +3,7 @@ package io.github.defective4.dsp.vcd4j.data;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class VCD {
     private final String date, version, comment;
@@ -13,6 +14,10 @@ public class VCD {
 
     public VCD(String date, String version, String comment, Scope scope, TimeScale timeScale,
             Map<Long, List<ChangeEntry<?>>> valueChanges, Map<String, VariableDefinition> variableDefinitions) {
+        Objects.requireNonNull(scope);
+        Objects.requireNonNull(timeScale);
+        Objects.requireNonNull(valueChanges);
+        Objects.requireNonNull(variableDefinitions);
         this.date = date;
         this.version = version;
         this.comment = comment;
@@ -20,6 +25,11 @@ public class VCD {
         this.timeScale = timeScale;
         this.valueChanges = Collections.unmodifiableMap(valueChanges);
         this.variableDefinitions = Collections.unmodifiableMap(variableDefinitions);
+    }
+
+    public VCD(TimeScale timeScale, Map<Long, List<ChangeEntry<?>>> valueChanges,
+            Map<String, VariableDefinition> variableDefinitions) {
+        this(null, null, null, Scope.DEFAULT, timeScale, valueChanges, variableDefinitions);
     }
 
     public String getComment() {

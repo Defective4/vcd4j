@@ -1,5 +1,6 @@
 package io.github.defective4.dsp.vcd4j.data;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +41,8 @@ public class TimeScale {
     private final long value;
 
     public TimeScale(TimeUnit unit, long value) {
+        Objects.requireNonNull(unit);
+        if (value < 1) throw new IllegalArgumentException("TimeScale value < 1");
         this.unit = unit;
         this.value = value;
     }

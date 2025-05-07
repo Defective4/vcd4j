@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.defective4.dsp.vcd4j.data.BinaryChangeEntry;
@@ -28,12 +29,14 @@ public class VCDParser {
     private VCDParser() {}
 
     public static VCD parse(File vcdFile) throws FileNotFoundException, IOException {
+        Objects.requireNonNull(vcdFile);
         try (Reader reader = new FileReader(vcdFile)) {
             return parse(reader);
         }
     }
 
     public static VCD parse(Reader vcdReader) throws IOException {
+        Objects.requireNonNull(vcdReader);
         TimeScale timeScale = null;
         Scope scope = null;
         String date = null;

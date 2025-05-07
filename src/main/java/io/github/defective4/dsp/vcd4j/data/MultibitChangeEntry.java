@@ -6,6 +6,7 @@ public class MultibitChangeEntry extends ChangeEntry<Integer> {
 
     public MultibitChangeEntry(VariableDefinition variable, int value) {
         super(variable, value);
+        if (value < -1) throw new IllegalArgumentException("value < -1");
     }
 
     @Override
