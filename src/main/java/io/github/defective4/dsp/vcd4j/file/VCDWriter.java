@@ -5,8 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import io.github.defective4.dsp.vcd4j.data.BinaryChangeEntry;
 import io.github.defective4.dsp.vcd4j.data.ChangeEntry;
@@ -23,13 +26,29 @@ public class VCDWriter {
     private VCDWriter() {}
 
     public static void write(VCD vcd, File file) throws IOException {
+        write(vcd, file, StandardCharsets.UTF_8);
+    }
+
+    public static void write(VCD vcd, File file, Charset charset) throws IOException {
+        Objects.requireNonNull(file);
+        Objects.requireNonNull(vcd);
+        Objects.requireNonNull(charset);
         validate(vcd);
         try (Writer writer = new FileWriter(file)) {
             write(vcd, writer);
         }
     }
 
+    public static void write(VCD vcd, String file) throws IOException {
+        write(vcd, new File(file));
+    }
+
+    public static void write(VCD vcd, String file, Charset charset) throws IOException {
+        write(vcd, new File(file), charset);
+    }
+
     public static void write(VCD vcd, Writer vcdWriter) {
+        Objects.requireNonNull(vcdWriter);
         validate(vcd);
         try (PrintWriter writer = new PrintWriter(vcdWriter)) {
             if (vcd.getDate() != null) writeSection(writer, "date", vcd.getDate(), true);

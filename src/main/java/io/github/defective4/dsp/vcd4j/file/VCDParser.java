@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,7 +31,12 @@ public class VCDParser {
     private VCDParser() {}
 
     public static VCD parse(File vcdFile) throws FileNotFoundException, IOException {
+        return parse(vcdFile, StandardCharsets.UTF_8);
+    }
+
+    public static VCD parse(File vcdFile, Charset charset) throws FileNotFoundException, IOException {
         Objects.requireNonNull(vcdFile);
+        Objects.requireNonNull(charset);
         try (Reader reader = new FileReader(vcdFile)) {
             return parse(reader);
         }
@@ -170,6 +177,14 @@ public class VCDParser {
             }
             return new VCD(date, version, comment, scope, timeScale, changesMap, variables);
         }
+    }
+
+    public static VCD parse(String vcdFile) throws FileNotFoundException, IOException {
+        return parse(new File(vcdFile));
+    }
+
+    public static VCD parse(String vcdFile, Charset charset) throws FileNotFoundException, IOException {
+        return parse(new File(vcdFile), charset);
     }
 
     private static String formatData(String data) {
