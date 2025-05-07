@@ -56,7 +56,7 @@ public class VCDRecorder {
     private final long accuracy;
     private final boolean accuracyCeil;
 
-    private final Map<Long, List<ChangeEntry<?>>> changes = new HashMap<>();
+    private final Map<Long, List<ChangeEntry<?>>> changes = new LinkedHashMap<>();
     private long startTimeNanos = -1;
     private final TimeScale timeScale;
     private final Map<String, VariableDefinition> variables = new HashMap<>();
@@ -67,15 +67,11 @@ public class VCDRecorder {
         this.accuracyCeil = accuracyCeil;
     }
 
-    public VCD getVCD(boolean sorted) {
+    public VCD getVCD() {
         if (startTimeNanos != -1) throw new IllegalStateException("Stop the recorder before getting the VCD");
-        Map<Long, List<ChangeEntry<?>>> changes = sorted ? new LinkedHashMap<>() : new HashMap<>();
+        Map<Long, List<ChangeEntry<?>>> changes = new LinkedHashMap<>();
         Map<String, VariableDefinition> variables = new HashMap<>();
-        if (sorted) {
-            List<Map.Entry<Long, List<ChangeEntry<?>>>> entries = new ArrayList<>(this.changes.entrySet());
-            entries.sort((e1, e2) -> (int) (e1.getKey() - e2.getKey()));
-            entries.forEach(entry -> changes.put(entry.getKey(), entry.getValue()));
-        } else changes.putAll(this.changes);
+        changes.putAll(this.changes);
         variables.putAll(this.variables);
         return new VCD(timeScale, changes, variables);
     }
@@ -115,7 +111,25 @@ public class VCDRecorder {
 
     public void stop() {
         if (startTimeNanos == -1) return;
+        long time = calculateTimePassed();
         startTimeNanos = -1;
+        List<Map.Entry<Long, List<ChangeEntry<?>>>> entries = new ArrayList<>(changes.entrySet());
+        Map<Long, List<ChangeEntry<?>>> changes = new LinkedHashMap<>();
+        List<ChangeEntry<?>> defaultEntries = new ArrayList<>();
+        for (VariableDefinition def : variables.values()) defaultEntries
+                .add(def.getBitCount() == 1 ? new BinaryChangeEntry(def, State.UNDEFINED)
+                        : new MultibitChangeEntry(def, MultibitChangeEntry.UNDEFINED));
+        if (entries.isEmpty()) {
+            changes.put(time, defaultEntries);
+        } else {
+            changes.put(entries.get(0).getKey(), defaultEntries);
+            for (int i = 0; i < entries.size() - 1; i++) {
+                changes.put(entries.get(i + 1).getKey(), entries.get(i).getValue());
+            }
+            if (!changes.containsKey(time)) changes.put(time, entries.get(entries.size() - 1).getValue());
+        }
+        this.changes.clear();
+        this.changes.putAll(changes);
     }
 
     private long calculateTimePassed() {
