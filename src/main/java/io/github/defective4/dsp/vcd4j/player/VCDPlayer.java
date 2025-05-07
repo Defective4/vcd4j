@@ -33,12 +33,8 @@ public class VCDPlayer {
         Objects.requireNonNull(variableDefinitions);
         if (valueChanges.isEmpty()) throw new IllegalArgumentException("Value changes can't be empty");
         if (variableDefinitions.isEmpty()) throw new IllegalArgumentException("Variable definitions can't be empty");
-        if (timeScale.getUnit() == TimeUnit.PICOSECOND) {
-            throw new IllegalArgumentException(
-                    "Picosecond time scale is not supported. Try using VCD#setTimeScaleUnit or VCD#multiply before passing it as an argument."); // TODO
-                                                                                                                                                 // implement
-                                                                                                                                                 // the
-                                                                                                                                                 // methods
+        if (timeScale.getUnit().getTimeUnit() == null) {
+            throw new IllegalArgumentException(timeScale.getUnit().name() + " time scale is not supported.");
         }
         this.timeScale = timeScale;
         this.variableDefinitions = variableDefinitions;
@@ -49,7 +45,15 @@ public class VCDPlayer {
     }
 
     public VCDPlayer(VCD vcd) {
-        this(vcd.getTimeScale(), vcd.getValueChanges(), vcd.getVariableDefinitions());
+        this(vcd.getTimeScale().getUnit().getTimeUnit() == null ? new TimeScale(TimeUnit.SECOND, 1)
+                : vcd.getTimeScale(), vcd.getValueChanges(), vcd.getVariableDefinitions());
+        if (vcd.getTimeScale().getUnit().getTimeUnit() == null) {
+            throw new IllegalArgumentException(vcd.getTimeScale().getUnit().name()
+                    + " time scale is not supported. Try using VCD#setTimeScaleUnit before passing it as an argument."); // TODO
+            // implement
+            // the
+            // methods
+        }
     }
 
     public boolean addListener(PlayerListener listener) {
