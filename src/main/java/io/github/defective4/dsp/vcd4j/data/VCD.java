@@ -1,6 +1,5 @@
 package io.github.defective4.dsp.vcd4j.data;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +8,8 @@ import java.util.Objects;
 import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
 
 public class VCD {
-    private final String date, version, comment;
-    private final Scope scope;
+    private String date, version, comment;
+    private Scope scope;
     private TimeScale timeScale;
     private final Map<Long, List<ChangeEntry<?>>> valueChanges;
     private final Map<String, VariableDefinition> variableDefinitions;
@@ -27,7 +26,7 @@ public class VCD {
         this.scope = scope;
         this.timeScale = timeScale;
         this.valueChanges = valueChanges;
-        this.variableDefinitions = Collections.unmodifiableMap(variableDefinitions);
+        this.variableDefinitions = variableDefinitions;
     }
 
     public VCD(TimeScale timeScale, Map<Long, List<ChangeEntry<?>>> valueChanges,
@@ -63,7 +62,7 @@ public class VCD {
     }
 
     public Map<Long, List<ChangeEntry<?>>> getValueChanges() {
-        return Collections.unmodifiableMap(valueChanges);
+        return valueChanges;
     }
 
     public Map<String, VariableDefinition> getVariableDefinitions() {
@@ -72,6 +71,22 @@ public class VCD {
 
     public String getVersion() {
         return version;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setScope(Scope scope) {
+        this.scope = scope;
+    }
+
+    public void setTimeScale(TimeScale timeScale) {
+        this.timeScale = timeScale;
     }
 
     public void setTimeScaleUnit(TimeScaleUnit unit, boolean adjustValues) {
@@ -94,6 +109,10 @@ public class VCD {
             valueChanges.putAll(converted);
         }
         timeScale = new TimeScale(unit, timeScale.getValue());
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     @Override

@@ -8,9 +8,9 @@ public class VariableDefinition {
     }
 
     private final byte bitCount;
+    private final String key;
     private final String name;
     private final Type type;
-    private final String key;
 
     public VariableDefinition(String key, Type type, byte bitCount, String name) {
         Objects.requireNonNull(type);
@@ -22,12 +22,12 @@ public class VariableDefinition {
         this.key = key;
     }
 
-    public String getKey() {
-        return key;
-    }
-
     public byte getBitCount() {
         return bitCount;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public String getName() {
