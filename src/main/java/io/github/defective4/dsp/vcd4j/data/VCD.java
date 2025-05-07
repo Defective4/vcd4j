@@ -1,14 +1,17 @@
 package io.github.defective4.dsp.vcd4j.data;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
+
 public class VCD {
     private final String date, version, comment;
     private final Scope scope;
-    private final TimeScale timeScale;
+    private TimeScale timeScale;
     private final Map<Long, List<ChangeEntry<?>>> valueChanges;
     private final Map<String, VariableDefinition> variableDefinitions;
 
@@ -23,7 +26,7 @@ public class VCD {
         this.comment = comment;
         this.scope = scope;
         this.timeScale = timeScale;
-        this.valueChanges = Collections.unmodifiableMap(valueChanges);
+        this.valueChanges = valueChanges;
         this.variableDefinitions = Collections.unmodifiableMap(variableDefinitions);
     }
 
@@ -49,7 +52,7 @@ public class VCD {
     }
 
     public Map<Long, List<ChangeEntry<?>>> getValueChanges() {
-        return valueChanges;
+        return Collections.unmodifiableMap(valueChanges);
     }
 
     public Map<String, VariableDefinition> getVariableDefinitions() {
@@ -58,6 +61,28 @@ public class VCD {
 
     public String getVersion() {
         return version;
+    }
+
+    public void setTimeScaleUnit(TimeScaleUnit unit, boolean adjustValues) {
+        Objects.requireNonNull(unit);
+        if (adjustValues) {
+            double multiplier = timeScale.getUnit().getNth() / unit.getNth();
+            Map<Long, List<ChangeEntry<?>>> converted = new HashMap<>();
+            for (Map.Entry<Long, List<ChangeEntry<?>>> entry : valueChanges.entrySet()) {
+                double result;
+                if (entry.getKey() == 0) {
+                    result = 0;
+                } else {
+                    result = entry.getKey() * multiplier;
+                    if (result < 1) throw new IllegalStateException(
+                            "Couldn't convert value " + entry.getKey() + " because the division result would be 0");
+                }
+                converted.put((long) Math.floor(result), entry.getValue());
+            }
+            valueChanges.clear();
+            valueChanges.putAll(converted);
+        }
+        timeScale = new TimeScale(unit, timeScale.getValue());
     }
 
     @Override

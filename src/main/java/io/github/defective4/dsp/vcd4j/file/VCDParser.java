@@ -21,7 +21,7 @@ import io.github.defective4.dsp.vcd4j.data.Scope;
 import io.github.defective4.dsp.vcd4j.data.Scope.Type;
 import io.github.defective4.dsp.vcd4j.data.State;
 import io.github.defective4.dsp.vcd4j.data.TimeScale;
-import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeUnit;
+import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
 import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
 
@@ -95,7 +95,7 @@ public class VCDParser {
                         scope = new Scope(type, name);
                     }
                     case "timescale" -> {
-                        TimeUnit timeScaleUnit = TimeUnit.parseTimeUnit(data);
+                        TimeScaleUnit timeScaleUnit = TimeScaleUnit.parseTimeUnit(data);
                         long timeScaleValue;
                         try {
                             timeScaleValue = Long

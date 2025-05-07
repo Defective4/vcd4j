@@ -11,7 +11,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import io.github.defective4.dsp.vcd4j.data.ChangeEntry;
 import io.github.defective4.dsp.vcd4j.data.TimeScale;
-import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeUnit;
+import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
 import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
 
@@ -45,14 +45,11 @@ public class VCDPlayer {
     }
 
     public VCDPlayer(VCD vcd) {
-        this(vcd.getTimeScale().getUnit().getTimeUnit() == null ? new TimeScale(TimeUnit.SECOND, 1)
+        this(vcd.getTimeScale().getUnit().getTimeUnit() == null ? new TimeScale(TimeScaleUnit.SECOND, 1)
                 : vcd.getTimeScale(), vcd.getValueChanges(), vcd.getVariableDefinitions());
         if (vcd.getTimeScale().getUnit().getTimeUnit() == null) {
             throw new IllegalArgumentException(vcd.getTimeScale().getUnit().name()
-                    + " time scale is not supported. Try using VCD#setTimeScaleUnit before passing it as an argument."); // TODO
-            // implement
-            // the
-            // methods
+                    + " time scale is not supported. Try using VCD#setTimeScaleUnit before passing it as an argument.");
         }
     }
 
@@ -92,7 +89,7 @@ public class VCDPlayer {
                 listeners.forEach(ls -> ls.valuesChanged(entries));
             }
             listeners.forEach(ls -> ls.playerTicked(playerTime));
-        }, 1, 1, timeScale.getUnit().getTimeUnit());
+        }, 0, 1, timeScale.getUnit().getTimeUnit());
     }
 
     public void stop() {
