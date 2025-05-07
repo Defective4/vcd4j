@@ -7,10 +7,15 @@ import java.util.regex.Pattern;
 public class TimeScale {
 
     public static enum TimeUnit {
-        MICROSECOND("us"), MILLISECOND("ms"), NANOSECOND("ns"), PICOSECOND("ps"), SECOND("s");
+        MICROSECOND("us", java.util.concurrent.TimeUnit.MICROSECONDS),
+        MILLISECOND("ms", java.util.concurrent.TimeUnit.MILLISECONDS),
+        NANOSECOND("ns", java.util.concurrent.TimeUnit.NANOSECONDS),
+        PICOSECOND("ps", null),
+        SECOND("s", java.util.concurrent.TimeUnit.SECONDS);
 
         private static final Pattern PATTERN;
         private final String name;
+        private final java.util.concurrent.TimeUnit unit;
 
         static {
             TimeUnit[] vals = TimeUnit.values();
@@ -19,12 +24,17 @@ public class TimeScale {
             PATTERN = Pattern.compile("[" + String.join(",", names) + "]");
         }
 
-        private TimeUnit(String name) {
+        private TimeUnit(String name, java.util.concurrent.TimeUnit unit) {
             this.name = name;
+            this.unit = unit;
         }
 
         public String getName() {
             return name;
+        }
+
+        public java.util.concurrent.TimeUnit getTimeUnit() {
+            return unit;
         }
 
         public static TimeUnit parseTimeUnit(String timescale) {
