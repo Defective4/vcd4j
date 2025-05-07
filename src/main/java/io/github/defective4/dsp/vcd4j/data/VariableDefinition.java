@@ -10,14 +10,20 @@ public class VariableDefinition {
     private final byte bitCount;
     private final String name;
     private final Type type;
+    private final String key;
 
-    public VariableDefinition(Type type, byte bitCount, String name) {
+    public VariableDefinition(String key, Type type, byte bitCount, String name) {
         Objects.requireNonNull(type);
         Objects.requireNonNull(name);
         if (bitCount < 1) throw new IllegalArgumentException("bitCount < 1");
         this.type = type;
         this.bitCount = bitCount;
         this.name = name;
+        this.key = key;
+    }
+
+    public String getKey() {
+        return key;
     }
 
     public byte getBitCount() {

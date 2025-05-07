@@ -55,7 +55,7 @@ public class VCDParser {
                         String[] split = data.split(" ");
                         String typeName = split[0];
                         String bitsStr = split[1];
-                        String ch = split[2];
+                        String key = split[2];
                         String name = split[3];
 
                         VariableDefinition.Type type;
@@ -75,7 +75,7 @@ public class VCDParser {
                             throw new IOException("Invalid bits count: " + bitsStr);
                         }
 
-                        variables.put(ch, new VariableDefinition(type, bitsCount, name));
+                        variables.put(key, new VariableDefinition(key, type, bitsCount, name));
                     }
                     case "date" -> date = data;
                     case "version" -> version = data;
