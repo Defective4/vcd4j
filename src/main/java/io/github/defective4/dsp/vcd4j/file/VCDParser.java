@@ -117,7 +117,7 @@ public class VCDParser {
             while (true) {
                 String line = reader.readLine();
                 if (line == null) break;
-                if (line.startsWith("$")) continue;
+                if (line.isBlank() || line.startsWith("$")) continue;
                 if (line.startsWith("#")) {
                     try {
                         long timestamp = Long.parseLong(line.substring(1));

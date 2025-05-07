@@ -72,23 +72,29 @@ public class VCDPlayer {
         long start = System.currentTimeMillis();
         playerService = Executors.newScheduledThreadPool(10);
         playerService.scheduleAtFixedRate(() -> {
-            if (index > valueChanges.size()) {
+            try {
+                if (index > valueChanges.size()) {
+                    stop();
+                    listeners.forEach(PlayerListener::playerStopped);
+                    return;
+                }
+                long prevTime = index > 0 ? valueChanges.get(index - 1).getKey() : 0;
+                playerTime += 1;
+                if (index == valueChanges.size()) {
+                    if (playerTime >= prevTime) index++;
+                    return;
+                }
+                List<ChangeEntry<?>> entries = valueChanges.get(index).getValue();
+                if (playerTime >= prevTime) {
+                    index++;
+                    listeners.forEach(ls -> ls.valuesChanged(entries));
+                }
+                listeners.forEach(ls -> ls.playerTicked(playerTime));
+            } catch (Exception e) {
+                e.printStackTrace();
                 stop();
-                listeners.forEach(PlayerListener::playerStopped);
                 return;
             }
-            long prevTime = index > 0 ? valueChanges.get(index - 1).getKey() : 0;
-            playerTime += 1;
-            if (index == valueChanges.size()) {
-                if (playerTime >= prevTime) index++;
-                return;
-            }
-            List<ChangeEntry<?>> entries = valueChanges.get(index).getValue();
-            if (playerTime >= prevTime) {
-                index++;
-                listeners.forEach(ls -> ls.valuesChanged(entries));
-            }
-            listeners.forEach(ls -> ls.playerTicked(playerTime));
         }, 0, 1, timeScale.getUnit().getTimeUnit());
     }
 
