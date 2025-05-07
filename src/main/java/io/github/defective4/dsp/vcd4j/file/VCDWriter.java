@@ -65,7 +65,7 @@ public class VCDWriter {
                         }
                     } else if (val instanceof BinaryChangeEntry bb) {
                         writer.println(bb.getValue().getChar() + def.getKey());
-                    }
+                    } else throw new IllegalStateException("Unrecognized change entry class: " + val.getClass());
                 }
                 writer.println("#" + entry.getKey());
             }

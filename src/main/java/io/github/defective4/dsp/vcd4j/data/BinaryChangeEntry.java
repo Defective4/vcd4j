@@ -1,6 +1,6 @@
 package io.github.defective4.dsp.vcd4j.data;
 
-public class BinaryChangeEntry extends ChangeEntry<State> {
+public final class BinaryChangeEntry extends ChangeEntry<State> {
     public BinaryChangeEntry(VariableDefinition variable, State value) {
         super(variable, value);
     }

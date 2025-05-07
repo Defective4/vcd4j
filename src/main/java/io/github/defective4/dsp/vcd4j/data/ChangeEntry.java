@@ -2,7 +2,7 @@ package io.github.defective4.dsp.vcd4j.data;
 
 import java.util.Objects;
 
-public abstract class ChangeEntry<T> {
+public abstract sealed class ChangeEntry<T> permits BinaryChangeEntry, MultibitChangeEntry {
     private final T value;
     private final VariableDefinition variable;
 

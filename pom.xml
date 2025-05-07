@@ -17,6 +17,20 @@
 				<version>3.14.0</version>
 				<configuration>
 					<release>17</release>
+					<compileSourceRoots>
+						<compileSourceRoot>src/main/java</compileSourceRoot>
+						<compileSourceRoot>src/main/examples</compileSourceRoot>
+					</compileSourceRoots>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.4.2</version>
+				<configuration>
+					<excludes>
+						<exclude>/examples/</exclude>
+					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>

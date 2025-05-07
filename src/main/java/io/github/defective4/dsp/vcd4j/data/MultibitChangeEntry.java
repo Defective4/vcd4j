@@ -1,6 +1,6 @@
 package io.github.defective4.dsp.vcd4j.data;
 
-public class MultibitChangeEntry extends ChangeEntry<Integer> {
+public final class MultibitChangeEntry extends ChangeEntry<Integer> {
 
     public static final int UNDEFINED = -1;
 
