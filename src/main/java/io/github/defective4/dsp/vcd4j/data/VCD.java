@@ -1,7 +1,7 @@
 package io.github.defective4.dsp.vcd4j.data;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -33,6 +33,17 @@ public class VCD {
     public VCD(TimeScale timeScale, Map<Long, List<ChangeEntry<?>>> valueChanges,
             Map<String, VariableDefinition> variableDefinitions) {
         this(null, null, null, Scope.DEFAULT, timeScale, valueChanges, variableDefinitions);
+    }
+
+    public void adjustTimeScale() {
+        long oldValue = timeScale.getValue();
+        timeScale = new TimeScale(timeScale.getUnit(), 1);
+        Map<Long, List<ChangeEntry<?>>> converted = new LinkedHashMap<>();
+        for (Map.Entry<Long, List<ChangeEntry<?>>> entry : valueChanges.entrySet()) {
+            converted.put(entry.getKey() * oldValue, entry.getValue());
+        }
+        valueChanges.clear();
+        valueChanges.putAll(converted);
     }
 
     public String getComment() {
@@ -67,7 +78,7 @@ public class VCD {
         Objects.requireNonNull(unit);
         if (adjustValues) {
             double multiplier = timeScale.getUnit().getNth() / unit.getNth();
-            Map<Long, List<ChangeEntry<?>>> converted = new HashMap<>();
+            Map<Long, List<ChangeEntry<?>>> converted = new LinkedHashMap<>();
             for (Map.Entry<Long, List<ChangeEntry<?>>> entry : valueChanges.entrySet()) {
                 double result;
                 if (entry.getKey() == 0) {
