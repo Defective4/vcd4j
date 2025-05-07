@@ -23,12 +23,14 @@ public class VCDWriter {
     private VCDWriter() {}
 
     public static void write(VCD vcd, File file) throws IOException {
+        validate(vcd);
         try (Writer writer = new FileWriter(file)) {
             write(vcd, writer);
         }
     }
 
     public static void write(VCD vcd, Writer vcdWriter) {
+        validate(vcd);
         try (PrintWriter writer = new PrintWriter(vcdWriter)) {
             if (vcd.getDate() != null) writeSection(writer, "date", vcd.getDate(), true);
             if (vcd.getVersion() != null) writeSection(writer, "version", vcd.getVersion(), true);
