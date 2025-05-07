@@ -20,6 +20,10 @@ public class VCD {
         Objects.requireNonNull(timeScale);
         Objects.requireNonNull(valueChanges);
         Objects.requireNonNull(variableDefinitions);
+        for (Map.Entry<String, VariableDefinition> entry : variableDefinitions.entrySet()) {
+            if (!entry.getKey().equals(entry.getValue().getKey()))
+                throw new IllegalArgumentException("Map key and variable key mismatch");
+        }
         this.date = date;
         this.version = version;
         this.comment = comment;
