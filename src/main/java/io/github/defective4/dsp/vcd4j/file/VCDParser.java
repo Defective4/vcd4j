@@ -9,10 +9,10 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.defective4.dsp.vcd4j.data.BinaryChangeEntry;
 import io.github.defective4.dsp.vcd4j.data.ChangeEntry;
@@ -113,7 +113,7 @@ public class VCDParser {
             if (scope == null) throw new IOException("Scope is missing from the VCD file");
             // Begin reading dumpvars
             List<ChangeEntry<?>> entries = new ArrayList<>();
-            Map<Long, List<ChangeEntry<?>>> changesMap = new ConcurrentHashMap<>();
+            Map<Long, List<ChangeEntry<?>>> changesMap = new LinkedHashMap<>();
             while (true) {
                 String line = reader.readLine();
                 if (line == null) break;
