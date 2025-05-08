@@ -133,7 +133,7 @@ public class VCDPlayer {
                     return;
                 }
                 long prevTime = index > 0 ? valueChanges.get(index - 1).getKey() : 0;
-                playerTime += 1;
+                playerTime += timeScale.getResolution() * speedMultiplier;
                 if (index == valueChanges.size()) {
                     if (playerTime >= prevTime) index++;
                     return;
@@ -150,7 +150,7 @@ public class VCDPlayer {
                 stop();
                 return;
             }
-        }, 0, speedMultiplier, timeScale.getUnit().getTimeUnit());
+        }, 0, timeScale.getResolution(), timeScale.getUnit().getTimeUnit());
     }
 
     /**
