@@ -1,3 +1,5 @@
+<img width="128" height="128" src="logo.png" />  
+
 # VCD4j
 A VCD (Value Change Dump) files parser, player, recorder and writer library for Java
 
