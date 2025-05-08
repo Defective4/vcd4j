@@ -36,6 +36,7 @@ Possible example names are listed after running the jar with no arguments.
 - [ ] Support for multiple scopes
 - [ ] Better VCD simulation accuracy
 - [ ] Better handling of malformed VCD files
+- [ ] Convert VCD to OOK (On-Off Keying) bits
 
 # Contributing
 All contributions are welcome!  
