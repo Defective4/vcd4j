@@ -8,6 +8,7 @@ A VCD (Value Change Dump) files parser, player, recorder and writer library for 
 [[Source](https://zipcpu.com/blog/2017/07/31/vcd.html)]  
 
 **VCD4j** is a Java library that allows you to not only read and write your own VCD files, but also record and replay them in real time!  
+The goal of this project is to be an all-in-one tool to read, edit, modify and write Value Change Dump files.  
 Here are its key components:
 - **Parser**  
   VCD parser supports both four-state and multi-bit values.
