@@ -60,7 +60,7 @@ public class VCDRecorder {
          *
          * @param  accuracy
          * @return
-         * @throws IllegalArgumentException if accuracy < 1
+         * @throws IllegalArgumentException if accuracy is less than 1
          */
         public Builder setAccuracy(long accuracy) {
             if (accuracy < 1) throw new IllegalArgumentException("accuracy < 1");

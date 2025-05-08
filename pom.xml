@@ -11,6 +11,36 @@
 	</properties>
 	<profiles>
 		<profile>
+			<id>deploy-prod</id>
+			<distributionManagement>
+				<repository>
+					<id>sonatype-nexus-staging</id>
+					<url>
+						https://s01.oss.sonatype.org/content/repositories/releases</url>
+				</repository>
+			</distributionManagement>
+			<activation>
+				<property>
+					<name>deployProd</name>
+					<value>true</value>
+				</property>
+			</activation>
+		</profile>
+		<profile>
+			<id>deploy-local</id>
+			<distributionManagement>
+				<repository>
+					<id>raspberrypi</id>
+					<url>https://raspberrypi:3000/api/packages/Defective/maven</url>
+				</repository>
+			</distributionManagement>
+			<activation>
+				<property>
+					<name>!deployProd</name>
+				</property>
+			</activation>
+		</profile>
+		<profile>
 			<id>vcd4j-examples</id>
 			<build>
 				<finalName>vcd4j-${project.version}-examples</finalName>
@@ -80,6 +110,44 @@
 				<configuration>
 					<release>17</release>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.3.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.6.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>3.2.4</version>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

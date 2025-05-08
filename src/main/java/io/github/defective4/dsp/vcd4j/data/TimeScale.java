@@ -88,7 +88,7 @@ public class TimeScale {
      * @param  resolution               a positive <code>long</code> representing
      *                                  this time scale's resolution
      *
-     * @throws IllegalArgumentException if resolution < 1
+     * @throws IllegalArgumentException if resolution is less than 1
      */
     public TimeScale(TimeScaleUnit unit, long resolution) {
         Objects.requireNonNull(unit);
