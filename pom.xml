@@ -19,7 +19,7 @@
 					<release>17</release>
 					<compileSourceRoots>
 						<compileSourceRoot>src/main/java</compileSourceRoot>
-						<compileSourceRoot>src/main/examples</compileSourceRoot>
+						<compileSourceRoot>src/examples</compileSourceRoot>
 					</compileSourceRoots>
 				</configuration>
 			</plugin>
