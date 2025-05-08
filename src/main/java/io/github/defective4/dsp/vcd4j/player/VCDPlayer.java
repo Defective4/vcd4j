@@ -15,6 +15,9 @@ import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
 import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
 
+/**
+ * Plays VCD files
+ */
 public class VCDPlayer {
     private int index = 0;
     private final List<PlayerListener> listeners = new CopyOnWriteArrayList<>();
@@ -29,6 +32,17 @@ public class VCDPlayer {
 
     private final Map<String, VariableDefinition> variableDefinitions;
 
+    /**
+     * Constructs a new VCD player
+     *
+     * @param  timeScale                time scale used for playing the VCD
+     * @param  valueChanges             list of value change entries
+     * @param  variableDefinitions      list of variable definitions
+     *
+     * @throws IllegalArgumentException if valueChanges or variableDefinitions is
+     *                                  empty, or if the time scale unit is
+     *                                  {@link TimeScaleUnit#PICOSECOND}
+     */
     public VCDPlayer(TimeScale timeScale, Map<Long, List<ChangeEntry<?>>> valueChanges,
             Map<String, VariableDefinition> variableDefinitions) {
         Objects.requireNonNull(timeScale);
@@ -42,11 +56,19 @@ public class VCDPlayer {
         this.timeScale = timeScale;
         this.variableDefinitions = variableDefinitions;
         for (Map.Entry<Long, List<ChangeEntry<?>>> entry : valueChanges.entrySet())
-            this.valueChanges.add(Map.entry(entry.getKey() * timeScale.getValue(), entry.getValue()));
+            this.valueChanges.add(Map.entry(entry.getKey() * timeScale.getResolution(), entry.getValue()));
 
         this.valueChanges.sort((e1, e2) -> (int) (e1.getKey() - e2.getKey()));
     }
 
+    /**
+     * Constructs a new VCD player.<br>
+     * This is a convenience constructor accepting a single VCD object.
+     *
+     * @param  vcd                      the VCD to play
+     * @throws IllegalArgumentException if the time scale unit is
+     *                                  {@link TimeScaleUnit#PICOSECOND}
+     */
     public VCDPlayer(VCD vcd) {
         this(vcd.getTimeScale().getUnit().getTimeUnit() == null ? new TimeScale(TimeScaleUnit.SECOND, 1)
                 : vcd.getTimeScale(), vcd.getValueChanges(), vcd.getVariableDefinitions());
@@ -79,11 +101,22 @@ public class VCDPlayer {
         return listeners.remove(listener);
     }
 
+    /**
+     * Sets playback speed of this player.<br>
+     * For example a value of <code>2</code> will result in a 2x faster playback
+     *
+     * @param speedMultiplier new playback speed
+     */
     public void setSpeedMultiplier(int speedMultiplier) {
         if (started) throw new IllegalStateException("Speed multiplier can't be changed when the player is started.");
         this.speedMultiplier = speedMultiplier;
     }
 
+    /**
+     * Starts the player
+     *
+     * @throws IllegalStateException if the player is already started
+     */
     public void start() {
         if (isStarted()) throw new IllegalStateException("Player already started");
         started = true;
@@ -117,8 +150,15 @@ public class VCDPlayer {
         }, 0, speedMultiplier, timeScale.getUnit().getTimeUnit());
     }
 
+    /**
+     * Stops the player. <br>
+     * If the player is already stopped, this method does nothing
+     */
     public void stop() {
-        if (playerService != null) playerService.shutdown();
+        if (playerService != null) {
+            playerService.shutdown();
+            playerService = null;
+        }
         index = 0;
         playerTime = 0;
         started = false;

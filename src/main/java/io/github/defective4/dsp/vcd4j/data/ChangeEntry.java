@@ -21,6 +21,13 @@ public abstract sealed class ChangeEntry<T> permits BinaryChangeEntry, MultibitC
         return variable;
     }
 
+    /**
+     * Checks if the change entry has an undefined value.<br>
+     * For {@link BinaryChangeEntry} it's {@link State}.UNDEFINED<br>
+     * For {@link MultibitChangeEntry} it's {@link MultibitChangeEntry#UNDEFINED}
+     *
+     * @return
+     */
     public abstract boolean isUndefined();
 
     @Override

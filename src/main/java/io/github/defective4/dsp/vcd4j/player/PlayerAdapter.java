@@ -4,6 +4,9 @@ import java.util.List;
 
 import io.github.defective4.dsp.vcd4j.data.ChangeEntry;
 
+/**
+ * An adapter class for {@link PlayerListener}
+ */
 public abstract class PlayerAdapter implements PlayerListener {
 
     @Override

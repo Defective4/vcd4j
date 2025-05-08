@@ -24,7 +24,9 @@ public class VCDParserExample {
             System.out.println("Date: " + vcd.getDate());
             System.out.println("Comment: " + vcd.getComment());
             TimeScale timeScale = vcd.getTimeScale();
-            System.out.println("Time scale: " + timeScale.getValue() + " " + timeScale.getUnit().name().toLowerCase());
+            System.out
+                    .println("Time scale: " + timeScale.getResolution() + " "
+                            + timeScale.getUnit().name().toLowerCase());
 
             System.out.println();
             System.out.println("Variables:");
@@ -35,7 +37,7 @@ public class VCDParserExample {
                 System.out
                         .println(String
                                 .format("%s-bit variable named \"%s\" (key %s)", var.getBitCount(), var.getName(),
-                                        var.getKey()));
+                                        var.getIdentifier()));
             }
 
             System.out.println();

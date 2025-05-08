@@ -15,17 +15,28 @@ import io.github.defective4.dsp.vcd4j.data.TimeScale;
 import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
 import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
+import io.github.defective4.dsp.vcd4j.player.VCDPlayer;
 
+/**
+ * Records value changes and stores them in VCD
+ */
 public class VCDRecorder {
+    /**
+     * The builder class
+     */
     public static class Builder {
         private long accuracy = 1;
         private boolean accuracyCeil = false;
         private final TimeScale timeScale;
 
+        /**
+         * Constructs a new builder
+         *
+         * @param timeScale a non-null time scale. Unlike {@link VCDPlayer},
+         *                  {@link VCDRecorder} accepts {@link TimeScaleUnit#PICOSECOND}
+         */
         public Builder(TimeScale timeScale) {
             Objects.requireNonNull(timeScale);
-//            if (timeScale.getUnit().getTimeUnit() == null) throw new IllegalArgumentException(
-//                    timeScale.getUnit().name().toLowerCase() + " time scale is not allowed");
             this.timeScale = timeScale;
         }
 
@@ -41,12 +52,30 @@ public class VCDRecorder {
             return accuracyCeil;
         }
 
+        /**
+         * Set this recorder's accuracy.<br>
+         * For example a value of 500 means that the recorder will round all value
+         * changes to nearest multiply of 500 of its time scale's units.<br>
+         * <b>Default value:</b> 1
+         *
+         * @param  accuracy
+         * @return
+         * @throws IllegalArgumentException if accuracy < 1
+         */
         public Builder setAccuracy(long accuracy) {
             if (accuracy < 1) throw new IllegalArgumentException("accuracy < 1");
             this.accuracy = accuracy;
             return this;
         }
 
+        /**
+         * It set to true, value change times will be rounded up.<br>
+         * Only useful is accuracy is set to more than 1.<br>
+         * <b>Default value:</b> false
+         *
+         * @param  accuracyCeil
+         * @return
+         */
         public Builder setAccuracyCeil(boolean accuracyCeil) {
             this.accuracyCeil = accuracyCeil;
             return this;
@@ -67,6 +96,14 @@ public class VCDRecorder {
         this.accuracyCeil = accuracyCeil;
     }
 
+    /**
+     * Get recorderd VCD.<br>
+     * Only usable after starting, then stopping the recorder.
+     *
+     * @return                       new VCD
+     * @throws IllegalStateException if the recorder was not stopped before using
+     *                               this method
+     */
     public VCD getVCD() {
         if (startTimeNanos != -1) throw new IllegalStateException("Stop the recorder before getting the VCD");
         Map<Long, List<ChangeEntry<?>>> changes = new LinkedHashMap<>();
@@ -76,32 +113,55 @@ public class VCDRecorder {
         return new VCD(timeScale, changes, variables);
     }
 
+    /**
+     * Insert a new 1-bit change at current time relative to recorder's startup
+     * time.
+     *
+     * @param  variable                 the variable definition
+     * @param  state                    state of the variable at time of insertion
+     * @throws IllegalStateException    if the recorder is not started
+     * @throws IllegalArgumentException if the variable definition's bit count is
+     *                                  not equal to 1, or if the variable is
+     *                                  already defined in the recorder with a
+     *                                  different bit count
+     */
     public void insertBinaryChange(VariableDefinition variable, State state) {
         if (startTimeNanos == -1) throw new IllegalStateException("Recorder is not started");
         if (variable.getBitCount() != 1)
             throw new IllegalArgumentException("The variable definition's bitCount must be equal to 1");
-        VariableDefinition currentDef = variables.get(variable.getKey());
-        if (currentDef == null) variables.put(variable.getKey(), variable);
+        VariableDefinition currentDef = variables.get(variable.getIdentifier());
+        if (currentDef == null) variables.put(variable.getIdentifier(), variable);
         else if (currentDef.getBitCount() != 1) throw new IllegalArgumentException(String
                 .format("Variable \"%s\" with key \"%s\" is already defined with a different bit count",
-                        variable.getName(), variable.getKey()));
+                        variable.getName(), variable.getIdentifier()));
         long timePassed = calculateTimePassed();
         putEntry(new BinaryChangeEntry(variable, state), timePassed);
     }
 
+    /**
+     * Insert a new mutli-bit change at current time relative to recorder's startup
+     * time.
+     *
+     * @param  variable                 the variable definition
+     * @param  value                    value of the variable at time of insertion
+     * @throws IllegalStateException    if the recorder is not started
+     * @throws IllegalArgumentException if the variable is already defined in the
+     *                                  recorder with a different bit count
+     */
     public void insertMultibitChange(VariableDefinition variable, int value) {
         if (startTimeNanos == -1) throw new IllegalStateException("Recorder is not started");
-        if (variable.getBitCount() == 1)
-            throw new IllegalArgumentException("The variable definition's bitCount must more than 1");
-        VariableDefinition currentDef = variables.get(variable.getKey());
-        if (currentDef == null) variables.put(variable.getKey(), variable);
+        VariableDefinition currentDef = variables.get(variable.getIdentifier());
+        if (currentDef == null) variables.put(variable.getIdentifier(), variable);
         else if (currentDef.getBitCount() != variable.getBitCount()) throw new IllegalArgumentException(String
                 .format("Variable \"%s\" with key \"%s\" is already defined with a different bit count",
-                        variable.getName(), variable.getKey()));
+                        variable.getName(), variable.getIdentifier()));
         long timePassed = calculateTimePassed();
         putEntry(new MultibitChangeEntry(variable, value), timePassed);
     }
 
+    /**
+     * Starts the recorder
+     */
     public void start() {
         if (startTimeNanos != -1) return;
         variables.clear();
@@ -109,6 +169,9 @@ public class VCDRecorder {
         startTimeNanos = System.nanoTime();
     }
 
+    /**
+     * Stops the recorder
+     */
     public void stop() {
         if (startTimeNanos == -1) return;
         long time = calculateTimePassed();
@@ -136,7 +199,7 @@ public class VCDRecorder {
         long timeNanos = System.nanoTime() - startTimeNanos;
         double div = timeScale.getUnit().getNth() / TimeScaleUnit.NANOSECOND.getNth();
         long timeConverted = (long) (timeNanos / div);
-        timeConverted /= timeScale.getValue();
+        timeConverted /= timeScale.getResolution();
         if (accuracy != 1) {
             double divResult = timeConverted / (double) accuracy;
             timeConverted = (long) (accuracyCeil ? Math.ceil(divResult) : divResult) * accuracy;

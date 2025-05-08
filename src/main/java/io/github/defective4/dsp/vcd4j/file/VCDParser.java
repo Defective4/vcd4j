@@ -27,6 +27,9 @@ import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
 import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
 
+/**
+ * Tries to parse a VCD a file/stream
+ */
 public class VCDParser {
     private VCDParser() {}
 

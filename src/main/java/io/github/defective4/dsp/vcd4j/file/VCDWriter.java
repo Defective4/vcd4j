@@ -20,6 +20,9 @@ import io.github.defective4.dsp.vcd4j.data.TimeScale;
 import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
 
+/**
+ * Writes VCD objects to files/streams
+ */
 public class VCDWriter {
 
     private static final String INDENT = "  ";
@@ -56,13 +59,13 @@ public class VCDWriter {
             if (vcd.getVersion() != null) writeSection(writer, "version", vcd.getVersion(), true);
             if (vcd.getComment() != null) writeSection(writer, "comment", vcd.getComment(), true);
             TimeScale timeScale = vcd.getTimeScale();
-            writeSection(writer, "timescale", timeScale.getValue() + timeScale.getUnit().getName());
+            writeSection(writer, "timescale", timeScale.getResolution() + timeScale.getUnit().getName());
             Scope scope = vcd.getScope();
             writeSection(writer, "scope", scope.getType().name().toLowerCase() + " " + scope.getName());
             for (Map.Entry<String, VariableDefinition> entry : vcd.getVariableDefinitions().entrySet()) {
                 VariableDefinition value = entry.getValue();
                 writeSection(writer, "var", value.getType().name().toLowerCase() + " " + value.getBitCount() + " "
-                        + value.getKey() + " " + value.getName());
+                        + value.getIdentifier() + " " + value.getName());
             }
             writer.println("$upscope $end");
             writer.println("$enddefinitions $end");
@@ -75,7 +78,7 @@ public class VCDWriter {
                     VariableDefinition def = val.getVariable();
                     if (val instanceof MultibitChangeEntry mb) {
                         writer.print("b");
-                        if (mb.isUndefined()) writer.println("x".repeat(def.getBitCount()) + " " + def.getKey());
+                        if (mb.isUndefined()) writer.println("x".repeat(def.getBitCount()) + " " + def.getIdentifier());
                         else {
                             String bitsString = Integer.toBinaryString(mb.getValue());
                             if (bitsString.length() < def.getBitCount()) {
@@ -84,10 +87,10 @@ public class VCDWriter {
                                     writer.print("0");
                                 }
                             }
-                            writer.println(bitsString + " " + def.getKey());
+                            writer.println(bitsString + " " + def.getIdentifier());
                         }
                     } else if (val instanceof BinaryChangeEntry bb) {
-                        writer.println(bb.getValue().getChar() + def.getKey());
+                        writer.println(bb.getValue().getChar() + def.getIdentifier());
                     } else throw new IllegalStateException("Unrecognized change entry class: " + val.getClass());
                 }
                 writer.println("#" + entry.getKey());
@@ -99,8 +102,8 @@ public class VCDWriter {
         Map<String, VariableDefinition> def = vcd.getVariableDefinitions();
         Map<Long, List<ChangeEntry<?>>> changes = vcd.getValueChanges();
         for (List<ChangeEntry<?>> list : changes.values()) for (ChangeEntry<?> entry : list)
-            if (!def.containsKey(entry.getVariable().getKey())) throw new IllegalArgumentException(
-                    String.format("Variable \"%s\" is undefined", entry.getVariable().getKey()));
+            if (!def.containsKey(entry.getVariable().getIdentifier())) throw new IllegalArgumentException(
+                    String.format("Variable \"%s\" is undefined", entry.getVariable().getIdentifier()));
     }
 
     private static void writeSection(PrintWriter writer, String tag, String data) {
