@@ -1,4 +1,4 @@
-package io.github.defective4.dsp.vcd4j.examples;
+package examples;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
