@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.defective4.avr</groupId>
 	<artifactId>vcd4j</artifactId>
-	<version>1.0</version>
+	<version>0.1</version>
 	<name>VCD4J</name>
 	<properties>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
