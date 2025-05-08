@@ -13,7 +13,7 @@
 		<profile>
 			<id>vcd4j-examples</id>
 			<build>
-				<finalName>vcd4j-examples</finalName>
+				<finalName>vcd4j-${project.version}-examples</finalName>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
