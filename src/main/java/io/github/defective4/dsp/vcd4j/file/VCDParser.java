@@ -65,13 +65,14 @@ public class VCDParser {
                         String key = split[2];
                         String name = split[3];
 
-                        VariableDefinition.Type type;
+                        VariableDefinition.VarType type;
                         try {
-                            type = VariableDefinition.Type.valueOf(typeName.toUpperCase());
+                            type = VariableDefinition.VarType.valueOf(typeName.toUpperCase());
                         } catch (Exception e) {
                             throw new IOException(String
                                     .format("Inalid variable type \"%s\" for variable \"%s\". Only \"%s\" is supported.",
-                                            typeName, name, VariableDefinition.Type.values()[0].name().toLowerCase()));
+                                            typeName, name,
+                                            VariableDefinition.VarType.values()[0].name().toLowerCase()));
                         }
 
                         byte bitsCount;

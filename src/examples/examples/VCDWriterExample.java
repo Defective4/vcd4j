@@ -17,7 +17,6 @@ import io.github.defective4.dsp.vcd4j.data.TimeScale;
 import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
 import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
-import io.github.defective4.dsp.vcd4j.data.VariableDefinition.Type;
 import io.github.defective4.dsp.vcd4j.file.VCDWriter;
 
 public class VCDWriterExample {
@@ -33,8 +32,8 @@ public class VCDWriterExample {
 
             Map<String, VariableDefinition> variableDefinitions = new HashMap<>();
             // The map key and variable key have to be the same
-            VariableDefinition signalVar = new VariableDefinition(".", Type.WIRE, 1, "signal");
-            VariableDefinition voltageVar = new VariableDefinition(",", Type.WIRE, 8, "voltage");
+            VariableDefinition signalVar = new VariableDefinition(".", VariableDefinition.VarType.WIRE, 1, "signal");
+            VariableDefinition voltageVar = new VariableDefinition(",", VariableDefinition.VarType.WIRE, 8, "voltage");
 
             variableDefinitions.put(".", signalVar);
             variableDefinitions.put(",", voltageVar);
@@ -43,20 +42,28 @@ public class VCDWriterExample {
 
             // Make signal and voltage variables undefined until 1000ms pass
             valueChanges
-                    .put(1000l,
-                            VCD
-                                    .makeChangeEntriesList(new BinaryChangeEntry(signalVar, State.UNDEFINED),
-                                            new MultibitChangeEntry(voltageVar, MultibitChangeEntry.UNDEFINED)));
+                    .put(1000l, VCD
+                            .makeChangeEntriesList( //
+                                    new BinaryChangeEntry(signalVar, State.UNDEFINED), // signal undefined
+                                    new MultibitChangeEntry(voltageVar, MultibitChangeEntry.UNDEFINED) // voltage
+                                                                                                       // undefined
+                            ));
 
             // Set signal to HIGH, don't change voltage until 2000ms pass
-            valueChanges.put(2000l, VCD.makeChangeEntriesList(new BinaryChangeEntry(signalVar, State.HIGH)));
+            valueChanges
+                    .put(2000l, VCD
+                            .makeChangeEntriesList( //
+                                    new BinaryChangeEntry(signalVar, State.HIGH) // signal
+                                                                                 // HIGH
+                            ));
 
             // Set signal to LOW, set voltage to 12 (0x0C) until 3500ms pass
             valueChanges
-                    .put(3500l,
-                            VCD
-                                    .makeChangeEntriesList(new BinaryChangeEntry(signalVar, State.LOW),
-                                            new MultibitChangeEntry(voltageVar, 12)));
+                    .put(3500l, VCD
+                            .makeChangeEntriesList( //
+                                    new BinaryChangeEntry(signalVar, State.LOW), // signal LOW
+                                    new MultibitChangeEntry(voltageVar, 12) // voltage 12
+                            ));
 
             // Finally, save the VCD file
             File vcdFile = new File("output.vcd");

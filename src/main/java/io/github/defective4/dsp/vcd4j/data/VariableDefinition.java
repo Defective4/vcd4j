@@ -3,16 +3,16 @@ package io.github.defective4.dsp.vcd4j.data;
 import java.util.Objects;
 
 public class VariableDefinition {
-    public static enum Type {
+    public static enum VarType {
         WIRE
     }
 
     private final byte bitCount;
     private final String key;
     private final String name;
-    private final Type type;
+    private final VarType type;
 
-    public VariableDefinition(String key, Type type, int bitCount, String name) {
+    public VariableDefinition(String key, VarType type, int bitCount, String name) {
         Objects.requireNonNull(type);
         Objects.requireNonNull(name);
         if (bitCount < 1) throw new IllegalArgumentException("bitCount < 1");
@@ -34,7 +34,7 @@ public class VariableDefinition {
         return name;
     }
 
-    public Type getType() {
+    public VarType getType() {
         return type;
     }
 
