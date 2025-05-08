@@ -17,10 +17,6 @@
 				<version>3.14.0</version>
 				<configuration>
 					<release>17</release>
-					<compileSourceRoots>
-						<compileSourceRoot>src/main/java</compileSourceRoot>
-						<compileSourceRoot>src/examples</compileSourceRoot>
-					</compileSourceRoots>
 				</configuration>
 			</plugin>
 			<plugin>
