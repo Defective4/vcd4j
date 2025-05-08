@@ -69,13 +69,13 @@ public class VCDPlayer {
     }
 
     public void start() {
-        long start = System.currentTimeMillis();
+        long start = System.nanoTime();
         playerService = Executors.newScheduledThreadPool(10);
         playerService.scheduleAtFixedRate(() -> {
             try {
                 if (index > valueChanges.size()) {
                     stop();
-                    listeners.forEach(PlayerListener::playerStopped);
+                    listeners.forEach(ls -> ls.playerStopped(playerTime, System.nanoTime() - start));
                     return;
                 }
                 long prevTime = index > 0 ? valueChanges.get(index - 1).getKey() : 0;
@@ -84,12 +84,13 @@ public class VCDPlayer {
                     if (playerTime >= prevTime) index++;
                     return;
                 }
+                long realTime = System.nanoTime() - start;
                 List<ChangeEntry<?>> entries = valueChanges.get(index).getValue();
                 if (playerTime >= prevTime) {
                     index++;
-                    listeners.forEach(ls -> ls.valuesChanged(entries));
+                    listeners.forEach(ls -> ls.valuesChanged(entries, playerTime, realTime));
                 }
-                listeners.forEach(ls -> ls.playerTicked(playerTime));
+                listeners.forEach(ls -> ls.playerTicked(playerTime, realTime));
             } catch (Exception e) {
                 e.printStackTrace();
                 stop();

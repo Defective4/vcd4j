@@ -7,12 +7,12 @@ import io.github.defective4.dsp.vcd4j.data.ChangeEntry;
 public abstract class PlayerAdapter implements PlayerListener {
 
     @Override
-    public void playerStopped() {}
+    public void playerStopped(long playerTime, long realTimeNanos) {}
 
     @Override
-    public void playerTicked(long currentTicks) {}
+    public void playerTicked(long playerTime, long realTimeNanos) {}
 
     @Override
-    public void valuesChanged(List<ChangeEntry<?>> entries) {}
+    public void valuesChanged(List<ChangeEntry<?>> entries, long playerTime, long realTimeNanos) {}
 
 }

@@ -5,9 +5,9 @@ import java.util.List;
 import io.github.defective4.dsp.vcd4j.data.ChangeEntry;
 
 public interface PlayerListener {
-    void playerStopped();
+    void playerStopped(long playerTime, long realTimeNanos);
 
-    void playerTicked(long currentTicks);
+    void playerTicked(long playerTime, long realTimeNanos);
 
-    void valuesChanged(List<ChangeEntry<?>> entries);
+    void valuesChanged(List<ChangeEntry<?>> entries, long playerTime, long realTimeNanos);
 }
