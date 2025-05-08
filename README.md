@@ -24,7 +24,7 @@ Possible example names are listed after running the jar with no arguments.
 # Roadmap
 - [ ] Support for multiple scopes
 - [ ] Better VCD simulation accuracy
-- [ ] Better handlinh of malformed VCD files
+- [ ] Better handling of malformed VCD files
 
 # Contributing
 All contributions are welcome!  
