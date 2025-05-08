@@ -4,22 +4,12 @@
 A VCD (Value Change Dump) files parser, player, recorder and writer library for Java
 
 # About
-> The VCD file format structure is a common data format that can be used to store digital logic traces, so that you can then later view it with a waveform viewing tool.  
-[[Source](https://zipcpu.com/blog/2017/07/31/vcd.html)]  
+The Value Change Dump (VCD) file format is a widely used data format for storing digital logic traces. It's used to analyze signal states over time using waveform viewing tools. It's common application is in hardware simulation and debugging.
 
-**VCD4j** is a Java library that allows you to not only read and write your own VCD files, but also record and replay them in real time!  
-The goal of this project is to be an all-in-one tool to read, edit, modify and write Value Change Dump files.  
-Here are its key components:
-- **Parser**  
-  VCD parser supports both four-state and multi-bit values.
-- **Writer**  
-  You can prepare your own Value Change Dumps and write them to a `.vcd` file  
-- **Player**  
-  Built-in VCD player lets you replay VCD files in real time with *up to* 1ns precision.  
-  The player can easily be integrated with other libraries such as [pi4j](http://www.pi4j.com/)
-- **Recorder**  
-  Digital signals can be recorderd from practically *any* source, including hardware devices.  
-  Just like the player, VCD recorder can be integrated with pi4j.  
+**VCD4j** is a Java library that aims to be an all-in-one tool for interacting with VCD files.  
+Its key features include the ability to **parse**, **write**, **replay**, and **record** VCD files in real time.  
+The library is designed to assist with reading and manipulating, and even creating your own Value Change Dump files, as well as to simulate and capture digital signals in real time for further processing.  
+Additionally, VCD4j is designed to be compatible with libraries such as [pi4j](http://www.pi4j.com/), making it a perfect library for working with digital signals on devices such as the Raspberry Pi
 
 # Examples
 Some basic examples on how to use VCD4j can be found in [examples](src/examples) directory.  
