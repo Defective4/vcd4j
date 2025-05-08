@@ -21,7 +21,9 @@ import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
 
 /**
- * Writes VCD objects to files/streams
+ * Provides methods to write {@link VCD} objects to VCD files.
+ *
+ * This class supports writing VCD data to output files and writers.
  */
 public class VCDWriter {
 

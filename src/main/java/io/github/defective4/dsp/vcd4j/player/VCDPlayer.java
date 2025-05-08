@@ -16,7 +16,10 @@ import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
 
 /**
- * Plays VCD files
+ * Provides functionality to play back VCD objects.
+ *
+ * This class simulates the timing and state changes of signals as described in
+ * a VCD file, and allows the addition of listeners to observe playback events.
  */
 public class VCDPlayer {
     private int index = 0;

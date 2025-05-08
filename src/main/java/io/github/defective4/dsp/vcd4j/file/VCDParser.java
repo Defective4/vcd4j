@@ -28,7 +28,10 @@ import io.github.defective4.dsp.vcd4j.data.VCD;
 import io.github.defective4.dsp.vcd4j.data.VariableDefinition;
 
 /**
- * Tries to parse a VCD a file/stream
+ * Provides methods to parse VCD files into {@link VCD} objects.
+ *
+ * This class supports parsing from various input sources, such as files and
+ * readers, and handles the structure and data representation of VCD files.
  */
 public class VCDParser {
     private VCDParser() {}

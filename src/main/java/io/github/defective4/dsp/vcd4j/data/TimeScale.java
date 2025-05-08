@@ -6,7 +6,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Represents time resolution of a VCD object. <br>
+ * Represents time scale of a VCD object. <br>
+ *
+ * This class encapsulates information about the unit and resolution of the time
+ * scale.
  */
 public class TimeScale {
 

@@ -11,7 +11,11 @@ import io.github.defective4.dsp.vcd4j.data.TimeScale.TimeScaleUnit;
 import io.github.defective4.dsp.vcd4j.player.VCDPlayer;
 
 /**
- * Represents a complete Value Change Dump
+ * Represents a complete Value Change Dump (VCD).
+ * <p>
+ * This class provides methods for accessing and manipulating the fields of a
+ * VCD object, including date, version, variable definitions, and value changes.
+ * </p>
  */
 public class VCD {
     private String date, version, comment;

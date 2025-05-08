@@ -1,7 +1,10 @@
 package io.github.defective4.dsp.vcd4j.data;
 
 /**
- * Represents a 1-bit change of variable's state
+ * Represents a one-bit binary change entry in a VCD file.
+ *
+ * This class is an extension of {@link ChangeEntry} for handling binary state
+ * changes.
  */
 public final class BinaryChangeEntry extends ChangeEntry<State> {
 
