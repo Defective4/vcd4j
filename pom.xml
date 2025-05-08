@@ -9,6 +9,57 @@
 	<properties>
 		<project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
 	</properties>
+	<profiles>
+		<profile>
+			<id>vcd4j-examples</id>
+			<build>
+				<finalName>vcd4j-examples</finalName>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<version>3.14.0</version>
+						<configuration>
+							<release>17</release>
+							<compileSourceRoots>
+								<compileSourceRoot>src/main/java</compileSourceRoot>
+								<compileSourceRoot>src/examples</compileSourceRoot>
+							</compileSourceRoots>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+			<activation>
+				<property>
+					<name>buildExamples</name>
+					<value>true</value>
+				</property>
+			</activation>
+
+		</profile>
+		<profile>
+			<id>vcd4j-core</id>
+			<activation>
+				<property>
+					<name>!buildExamples</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>3.4.2</version>
+						<configuration>
+							<excludes>
+								<exclude>/examples/</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>
@@ -17,16 +68,6 @@
 				<version>3.14.0</version>
 				<configuration>
 					<release>17</release>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.4.2</version>
-				<configuration>
-					<excludes>
-						<exclude>/examples/</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 		</plugins>
