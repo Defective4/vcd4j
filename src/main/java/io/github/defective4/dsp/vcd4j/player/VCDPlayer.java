@@ -20,6 +20,8 @@ public class VCDPlayer {
     private final List<PlayerListener> listeners = new CopyOnWriteArrayList<>();
     private ScheduledExecutorService playerService;
     private long playerTime = 0;
+    private boolean started;
+
     private final TimeScale timeScale;
 
     private final List<Map.Entry<Long, List<ChangeEntry<?>>>> valueChanges = new ArrayList<>();
@@ -63,12 +65,18 @@ public class VCDPlayer {
         return Collections.unmodifiableList(listeners);
     }
 
+    public boolean isStarted() {
+        return started;
+    }
+
     public boolean removeListener(PlayerListener listener) {
         Objects.requireNonNull(listener);
         return listeners.remove(listener);
     }
 
     public void start() {
+        if (isStarted()) throw new IllegalStateException("Player already started");
+        started = true;
         long start = System.nanoTime();
         playerService = Executors.newScheduledThreadPool(10);
         playerService.scheduleAtFixedRate(() -> {
@@ -100,8 +108,9 @@ public class VCDPlayer {
     }
 
     public void stop() {
-        playerService.shutdown();
+        if (playerService != null) playerService.shutdown();
         index = 0;
         playerTime = 0;
+        started = false;
     }
 }
