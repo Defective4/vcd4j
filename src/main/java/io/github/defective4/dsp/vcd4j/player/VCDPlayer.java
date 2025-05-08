@@ -20,6 +20,7 @@ public class VCDPlayer {
     private final List<PlayerListener> listeners = new CopyOnWriteArrayList<>();
     private ScheduledExecutorService playerService;
     private long playerTime = 0;
+    private int speedMultiplier = 1;
     private boolean started;
 
     private final TimeScale timeScale;
@@ -65,6 +66,10 @@ public class VCDPlayer {
         return Collections.unmodifiableList(listeners);
     }
 
+    public int getSpeedMultiplier() {
+        return speedMultiplier;
+    }
+
     public boolean isStarted() {
         return started;
     }
@@ -72,6 +77,11 @@ public class VCDPlayer {
     public boolean removeListener(PlayerListener listener) {
         Objects.requireNonNull(listener);
         return listeners.remove(listener);
+    }
+
+    public void setSpeedMultiplier(int speedMultiplier) {
+        if (started) throw new IllegalStateException("Speed multiplier can't be changed when the player is started.");
+        this.speedMultiplier = speedMultiplier;
     }
 
     public void start() {
@@ -104,7 +114,7 @@ public class VCDPlayer {
                 stop();
                 return;
             }
-        }, 0, 1, timeScale.getUnit().getTimeUnit());
+        }, 0, speedMultiplier, timeScale.getUnit().getTimeUnit());
     }
 
     public void stop() {
