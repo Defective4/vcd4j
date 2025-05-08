@@ -8,7 +8,7 @@ The Value Change Dump (VCD) file format is a widely used data format for storing
 
 **VCD4j** is a Java library that aims to be an all-in-one tool for interacting with VCD files.  
 Its key features include the ability to **parse**, **write**, **replay**, and **record** VCD files in real time.  
-The library is designed to assist with reading and manipulating, and even creating your own Value Change Dump files, as well as to simulate and capture digital signals in real time for further processing.  
+The library is designed to assist with reading, manipulating, and even creating your own Value Change Dump files, as well as to simulate and capture digital signals in real time for further processing.  
 Additionally, VCD4j is designed to be compatible with libraries such as [pi4j](http://www.pi4j.com/), making it a perfect library for working with digital signals on devices such as the Raspberry Pi
 
 # Examples
