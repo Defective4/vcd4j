@@ -12,7 +12,18 @@ The library is designed to assist with reading, manipulating, and even creating 
 Additionally, VCD4j is designed to be compatible with libraries such as [pi4j](http://www.pi4j.com/), making it a perfect library for working with digital signals on devices such as the Raspberry Pi
 
 # Installation
-*Waiting for Maven Central*
+
+## Maven
+Add the following in the `dependencies` section of your `pom.xml`:
+```xml
+<dependency>
+    <groupId>io.github.defective4.avr</groupId>
+    <artifactId>vcd4j</artifactId>
+    <version>{version}</version>
+</dependency>
+```
+Where version is the latest version available in Maven central:  
+![Maven Central Version](https://img.shields.io/maven-central/v/io.github.defective4.avr/vcd4j?style=flat-square&label=latest%20version&color=%237032C3)
 
 # Examples
 Some basic examples on how to use VCD4j can be found in [examples](src/examples) directory.  
